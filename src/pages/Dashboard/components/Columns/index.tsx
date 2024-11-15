@@ -19,16 +19,18 @@ type ColumnsProps = {
 const Collumns: React.FC<ColumnsProps> = ({ registrationsQuery }) => {
   const { registrations = [] } = registrationsQuery;
 
-  const filterStrategies = new Map<string, IFilterStrategy>([
-    [REVIEW, new ReviewFilterStrategy()],
-    [APPROVED, new ApprovedFilterStrategy()],
-    [REPROVED, new ReprovedFilterStrategy()],
-  ]);
 
   const renderRegistrationCards = useMemo(() => {
+    const filterStrategies = new Map<string, IFilterStrategy>([
+      [REVIEW, new ReviewFilterStrategy()],
+      [APPROVED, new ApprovedFilterStrategy()],
+      [REPROVED, new ReprovedFilterStrategy()],
+    ]);
+
     return allColumns.map((column) => {
       const strategy = filterStrategies.get(column.status);
       const filteredRegistrations = strategy?.filter(registrations);
+
       return (
         <S.Column status={column.status} key={column.title}>
           <S.TitleColumn status={column.status}>{column.title}</S.TitleColumn>
@@ -37,7 +39,7 @@ const Collumns: React.FC<ColumnsProps> = ({ registrationsQuery }) => {
               <S.EmptyContent>Nenhum Registro Encontrado.</S.EmptyContent>
             ) : (
               filteredRegistrations.map((registration) => (
-                <RegistrationCard data={registration} key={registration.id} />
+                <RegistrationCard registration={registration} key={registration.id} />
               ))
             )}
           </S.CollumContent>

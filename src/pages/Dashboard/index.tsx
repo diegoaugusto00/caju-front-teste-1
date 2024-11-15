@@ -1,8 +1,9 @@
 import Collumns from "./components/Columns";
 import * as S from "./styles";
-import { SearchBar } from "./components/Searchbar";
+
 import useGetRegistrations from "./hooks/registration/useGetRegistrations";
 import { UseGetRegistrationsReturn } from "./hooks/registration/types";
+import { SearchBar } from "./components/Searchbar";
 
 const DashboardPage = () => {
   const registrationsQuery: UseGetRegistrationsReturn = useGetRegistrations({ currentPage: 1 });

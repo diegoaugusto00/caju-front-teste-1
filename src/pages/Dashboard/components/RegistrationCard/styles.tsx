@@ -22,14 +22,3 @@ export const IconAndText = styled.div`
   gap: 8px;
 `;
 
-export const Actions = styled.div`
-  margin-top: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 4px;
-
-  svg {
-    cursor: pointer;
-  }
-`;

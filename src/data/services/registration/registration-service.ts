@@ -22,7 +22,7 @@ export const getRegistrations = async (
 
         const totalCount = parseInt(response.headers['x-total-count'] || '0');
         const totalPages = Math.ceil(totalCount / limit);
-
+        console.log("cpf", cpf)
         return {
             data: response.data,
             total: totalCount,

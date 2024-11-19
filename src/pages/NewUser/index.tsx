@@ -1,4 +1,4 @@
-import TextField from "~/components/atoms/TextField";
+import TextField from "~/components/atoms/Inputs/TextField";
 import * as S from "./styles";
 import Button from "~/components/atoms/Buttons";
 import { HiOutlineArrowLeft } from "react-icons/hi";
@@ -22,7 +22,7 @@ const NewUserPage = () => {
         <TextField placeholder="Email" label="Email" type="email" />
         <TextField placeholder="CPF" label="CPF" />
         <TextField label="Data de admissão" type="date" />
-        <Button onClick={() => { }}>Cadastrar</Button>
+        <Button onClick={() => {}}>Cadastrar</Button>
       </S.Card>
     </S.Container>
   );

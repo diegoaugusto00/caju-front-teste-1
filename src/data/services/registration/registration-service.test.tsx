@@ -42,7 +42,7 @@ describe('Registration Service', () => {
             const result = await getRegistrations();
 
             expect(mockedAxios.get).toHaveBeenCalledWith(
-                'http://localhost:3000/registrations',
+                'http://localhost:3002/registrations',
                 {
                     params: {
                         _page: 1,
@@ -74,7 +74,7 @@ describe('Registration Service', () => {
             const result = await getRegistrations(2, 20);
 
             expect(mockedAxios.get).toHaveBeenCalledWith(
-                'http://localhost:3000/registrations',
+                'http://localhost:3002/registrations',
                 {
                     params: {
                         _page: 2,
@@ -131,7 +131,7 @@ describe('Registration Service', () => {
             const result = await getRegistrations(1, 10, '12345678901', 'APROVED');
 
             expect(mockedAxios.get).toHaveBeenCalledWith(
-                'http://localhost:3000/registrations',
+                'http://localhost:3002/registrations',
                 {
                     params: {
                         _page: 1,

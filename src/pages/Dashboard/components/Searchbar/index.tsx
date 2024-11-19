@@ -2,21 +2,71 @@ import { HiRefresh } from "react-icons/hi";
 import { useHistory } from "react-router-dom";
 import Button from "~/components/atoms/Buttons";
 import { IconButton } from "~/components/atoms/Buttons/IconButton";
-import TextField from "~/components/atoms/TextField";
+import TextField from "~/components/atoms/Inputs/TextField";
 import routes from "~/router/routes";
 import * as S from "./styles";
-export const SearchBar = () => {
+import { cpfMask, removeMask } from "~/utils/cpf";
+import { useCallback, useEffect, useState } from "react";
+import useDebounce from "~/pages/hooks/useDebounce";
+import SelectComponent from "~/components/atoms/Inputs/Select";
+
+type SearchBarProps = {
+  onSearch?: (cpf: string, status: string) => void;
+};
+
+const statusOptions = [
+  { value: "", label: "Todos" },
+  { value: "REVIEW", label: "Pendente" },
+  { value: "APPROVED", label: "Aprovado" },
+  { value: "REPROVED", label: "Reprovado" },
+];
+
+export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const history = useHistory();
+  const [searchCPFValue, setSearchCPFValue] = useState<string>("");
+  const [searchStatusValue, setSearhStatusValue] = useState<string>("");
 
   const goToNewAdmissionPage = () => {
     history.push(routes.newUser);
   };
 
+  const debouncedSearchValue = useDebounce(searchCPFValue, 500);
+
+  useEffect(() => {
+    if (onSearch) {
+      const unmaskedValue = removeMask(debouncedSearchValue);
+      onSearch(unmaskedValue, searchStatusValue);
+    }
+  }, [debouncedSearchValue, onSearch, searchStatusValue]);
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSearhStatusValue(event.target.value);
+  };
+
+  const onRefetch = useCallback(() => {
+    setSearchCPFValue("");
+    setSearhStatusValue("");
+  }, [setSearchCPFValue]);
+
   return (
     <S.Container>
-      <TextField placeholder="Digite um CPF válido" />
+      <S.Row>
+        <TextField
+          placeholder="Digite um CPF válido"
+          maxLength={14}
+          mask={cpfMask}
+          value={searchCPFValue}
+          onChange={(e) => setSearchCPFValue(e.target.value)}
+        />
+        <SelectComponent
+          value={searchStatusValue}
+          placeholder="Selecione um status"
+          options={statusOptions}
+          onChange={handleSelectChange}
+        />
+      </S.Row>
       <S.Actions>
-        <IconButton aria-label="refetch">
+        <IconButton aria-label="refetch" onClick={onRefetch}>
           <HiRefresh />
         </IconButton>
         <Button onClick={() => goToNewAdmissionPage()}>Nova Admissão</Button>

@@ -2,7 +2,11 @@ import * as S from "./styles";
 import RegistrationCard from "../RegistrationCard";
 import { UseGetRegistrationsReturn } from "../../hooks/registration/types";
 import { useMemo } from "react";
-import { ApprovedFilterStrategy, ReprovedFilterStrategy, ReviewFilterStrategy } from "./strategy/filterStrategies";
+import {
+  ApprovedFilterStrategy,
+  ReprovedFilterStrategy,
+  ReviewFilterStrategy,
+} from "./strategy/filterStrategies";
 import type { IFilterStrategy } from "./strategy/filterStrategyInterface";
 import { APPROVED, REPROVED, REVIEW } from "./constants";
 
@@ -19,7 +23,6 @@ type ColumnsProps = {
 const Collumns: React.FC<ColumnsProps> = ({ registrationsQuery }) => {
   const { registrations = [] } = registrationsQuery;
 
-
   const renderRegistrationCards = useMemo(() => {
     const filterStrategies = new Map<string, IFilterStrategy>([
       [REVIEW, new ReviewFilterStrategy()],
@@ -35,11 +38,11 @@ const Collumns: React.FC<ColumnsProps> = ({ registrationsQuery }) => {
         <S.Column status={column.status} key={column.title}>
           <S.TitleColumn status={column.status}>{column.title}</S.TitleColumn>
           <S.CollumContent>
-            {(!filteredRegistrations || filteredRegistrations.length === 0) ? (
+            {!filteredRegistrations || filteredRegistrations.length === 0 ? (
               <S.EmptyContent>Nenhum Registro Encontrado.</S.EmptyContent>
             ) : (
-              filteredRegistrations.map((registration) => (
-                <RegistrationCard registration={registration} key={registration.id} />
+              filteredRegistrations.map((registration, index) => (
+                <RegistrationCard registration={registration} key={index} />
               ))
             )}
           </S.CollumContent>
@@ -48,11 +51,7 @@ const Collumns: React.FC<ColumnsProps> = ({ registrationsQuery }) => {
     });
   }, [registrations]);
 
-  return (
-    <S.Container>
-      {renderRegistrationCards}
-    </S.Container >
-  );
+  return <S.Container>{renderRegistrationCards}</S.Container>;
 };
 
 export default Collumns;

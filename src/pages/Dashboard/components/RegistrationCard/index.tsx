@@ -8,7 +8,6 @@ import { RegistrationButtons } from "~/components/organisms/registration-buttons
 import { Registration } from "~/data/models/registration";
 
 
-
 type RegistrationCardProps = {
   registration: Registration;
 };

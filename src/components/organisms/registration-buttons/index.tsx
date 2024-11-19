@@ -2,9 +2,9 @@ import * as S from "./styles";
 import { HiOutlineTrash } from "react-icons/hi";
 import { ButtonSmall } from "~/components/atoms/Buttons";
 import { IconButton } from "~/components/atoms/Buttons/IconButton";
+import { STATUS } from "~/pages/Dashboard/constants";
 
 //TODO - Mudar as constantes para outra pasta para evitar chamar o pages aqui
-import { REVIEW } from "~/pages/Dashboard/constants";
 
 type RegistrationButtonsProps = {
   status: string;
@@ -22,7 +22,7 @@ export const RegistrationButtons: React.FC<RegistrationButtonsProps> = ({
   ondelete,
 }) => {
   //TODO - Implementar factory para evitar repetições, usar record para mapear os status
-  if (status === REVIEW) {
+  if (status === STATUS.REVIEW) {
     return (
       <S.Actions>
         <ButtonSmall bgcolor="rgb(255, 145, 154)" onClick={onReject}>

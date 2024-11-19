@@ -31,6 +31,8 @@ jobs:
         run: npm test
 
       - name: Build project
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: npm run build
 
         # Upload dist folder as artifact for the next job

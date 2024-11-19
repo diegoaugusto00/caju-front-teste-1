@@ -2,9 +2,15 @@
 export default {
   verbose: true,
   preset: "ts-jest",
-  testEnvironment: "jsdom",
+  testEnvironment: "jest-environment-jsdom",
   transform: {
-    "^.+\\.tsx?$": ["ts-jest", { isolatedModules: true }],
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        isolatedModules: true,
+        babelConfig: true,
+      },
+    ],
     "^.+\\.(js|jsx)$": "babel-jest",
   },
   moduleNameMapper: {
@@ -12,20 +18,16 @@ export default {
   },
   clearMocks: true,
   collectCoverage: true,
-  coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'lcov'],
+  coverageDirectory: "coverage",
+  coverageReporters: ["text", "lcov"],
   coverageThreshold: {
     global: {
       branches: 70,
       functions: 70,
       lines: 70,
-      statements: 70
-    }
+      statements: 70,
+    },
   },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
-  testPathIgnorePatterns: [
-    "/node_modules/",
-    "/tests/",
-    '/src/utils/__tests__'
-  ]
+  testPathIgnorePatterns: ["/node_modules/", "/tests/", "/src/utils/__tests__"],
 };

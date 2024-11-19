@@ -33,16 +33,35 @@ jobs:
       - name: Build project
         run: npm run build
 
+        # Upload dist folder as artifact for the next job
+      - name: Upload dist directory as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+
+      - name: List dist directory (after build)
+        run: ls -la dist
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Download dist artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+
+      - name: List files before deploy (for debugging)
+        run: ls -la
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
 
       - name: Deploy to Netlify
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: |
-          npx netlify-cli deploy --prod --dir=build --site=$NETLIFY_SITE_ID
+          npx netlify-cli deploy --prod --dir=. --site=$NETLIFY_SITE_ID

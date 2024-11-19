@@ -8,12 +8,12 @@ import {
   ReviewFilterStrategy,
 } from "./strategy/filterStrategies";
 import type { IFilterStrategy } from "./strategy/filterStrategyInterface";
-import { APPROVED, REPROVED, REVIEW } from "./constants";
+import { STATUS } from "../../constants";
 
 const allColumns = [
-  { status: REVIEW, title: "Pronto para revisar" },
-  { status: APPROVED, title: "Aprovado" },
-  { status: REPROVED, title: "Reprovado" },
+  { status: STATUS.REVIEW, title: "Pronto para revisar" },
+  { status: STATUS.APPROVED, title: "Aprovado" },
+  { status: STATUS.REPROVED, title: "Reprovado" },
 ];
 
 type ColumnsProps = {
@@ -25,9 +25,9 @@ const Collumns: React.FC<ColumnsProps> = ({ registrationsQuery }) => {
 
   const renderRegistrationCards = useMemo(() => {
     const filterStrategies = new Map<string, IFilterStrategy>([
-      [REVIEW, new ReviewFilterStrategy()],
-      [APPROVED, new ApprovedFilterStrategy()],
-      [REPROVED, new ReprovedFilterStrategy()],
+      [STATUS.REVIEW, new ReviewFilterStrategy()],
+      [STATUS.APPROVED, new ApprovedFilterStrategy()],
+      [STATUS.REPROVED, new ReprovedFilterStrategy()],
     ]);
 
     return allColumns.map((column) => {

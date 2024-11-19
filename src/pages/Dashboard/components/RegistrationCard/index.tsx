@@ -6,24 +6,31 @@ import {
 } from "react-icons/hi";
 import { RegistrationButtons } from "~/components/organisms/registration-buttons";
 import { Registration } from "~/data/models/registration";
-
+import useUpdateRegistrationStatus from "../../hooks/registration/useUpdateRegistrationStatus";
+import useDeleteRegistration from "../../hooks/registration/useDeleteRegistration";
+import { STATUS } from "../../constants";
 
 type RegistrationCardProps = {
   registration: Registration;
 };
 
-const RegistrationCard: React.FC<RegistrationCardProps> = ({ registration }) => {
-  const onApprove = () => {
-    console.log("approved");
+const RegistrationCard: React.FC<RegistrationCardProps> = ({
+  registration,
+}) => {
+  const updateStatusMutation = useUpdateRegistrationStatus();
+  const deleteRegistrationMutation = useDeleteRegistration();
+
+  const updateStatus = (newStatus: string) => {
+    updateStatusMutation.mutate({
+      registration: registration,
+      newStatus,
+    });
   };
 
-  const onReject = () => {
-    console.log("rejected");
-  };
-
-  const onReview = () => {
-    console.log("reviewed");
-  };
+  const onApprove = () => updateStatus(STATUS.APPROVED);
+  const onReject = () => updateStatus(STATUS.REPROVED);
+  const onReview = () => updateStatus(STATUS.REVIEW);
+  const onDelete = () => deleteRegistrationMutation.mutate(registration.id);
 
   return (
     <S.Card data-testid="registration-card">
@@ -44,6 +51,7 @@ const RegistrationCard: React.FC<RegistrationCardProps> = ({ registration }) => 
         onApprove={onApprove}
         onReject={onReject}
         onReview={onReview}
+        ondelete={onDelete}
       />
     </S.Card>
   );

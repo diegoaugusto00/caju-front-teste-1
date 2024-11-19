@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { RegistrationPaginateResponse } from '~/data/models/registration';
+import type { Registration, RegistrationPaginateResponse } from '~/data/models/registration';
 
 export const getRegistrations = async (
     page = 1,
@@ -22,7 +22,6 @@ export const getRegistrations = async (
 
         const totalCount = parseInt(response.headers['x-total-count'] || '0');
         const totalPages = Math.ceil(totalCount / limit);
-        console.log("cpf", cpf)
         return {
             data: response.data,
             total: totalCount,
@@ -33,3 +32,31 @@ export const getRegistrations = async (
         throw error;
     }
 };
+
+export const updateRegistrationStatus = async (
+    registration: Registration,
+    status: string
+  ): Promise<void> => {
+    const { id } = registration;
+    try {
+        await axios.put(`http://localhost:3002/registrations/${id}`, { ...registration, status }, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  export const deleteRegistration = async (id: string): Promise<void> => {
+    try {
+      await axios.delete(`http://localhost:3002/registrations/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  };

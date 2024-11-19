@@ -18,7 +18,6 @@ const DashboardPage = () => {
   const handleSearch = (cpf: string, status: string) => {
     setCpfFilter(cpf);
     setStatusFilter(status);
-    console.log("status", status);
   };
 
   return (

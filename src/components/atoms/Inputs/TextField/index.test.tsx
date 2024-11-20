@@ -1,7 +1,6 @@
+import { act } from "react";
 import { render, fireEvent } from "@testing-library/react";
 import TextField from ".";
-import { cpfMask } from "~/utils/validators";
-import { act } from "react";
 
 describe("TextField Component", () => {
   it("should render without crashing", () => {
@@ -16,7 +15,7 @@ describe("TextField Component", () => {
 
   it("should apply the mask correctly", () => {
     const { getByLabelText } = render(
-      <TextField label="CPF" id="cpf" mask={cpfMask} />
+      <TextField label="CPF" id="cpf" mask="cpf" />
     );
     const input = getByLabelText("CPF") as HTMLInputElement;
 

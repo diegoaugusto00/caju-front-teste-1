@@ -1,9 +1,5 @@
 import { z } from "zod";
-import {
-  isValidCPF,
-  isValidFullName,
-  isValidFullName as isValidName,
-} from "~/utils/validators";
+import { isValidCPF, isValidFullName } from "~/utils/validators";
 import { removeNonDigits } from "~/utils/inputMask";
 
 export const formSchema = z.object({

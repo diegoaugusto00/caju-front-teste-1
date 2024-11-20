@@ -45,7 +45,7 @@ describe("Registration Service", () => {
         {
           params: {
             _page: 1,
-            _limit: 10,
+            _limit: 20,
             cpf: undefined,
             status: undefined,
           },

@@ -5,10 +5,10 @@ import { IconButton } from "~/components/atoms/Buttons/IconButton";
 import TextField from "~/components/atoms/Inputs/TextField";
 import routes from "~/router/routes";
 import * as S from "./styles";
-import { cpfMask, removeMask } from "~/utils/cpf";
 import { useCallback, useEffect, useState } from "react";
 import useDebounce from "~/pages/hooks/useDebounce";
 import SelectComponent from "~/components/atoms/Inputs/Select";
+import { removeNonDigits } from "~/utils/inputMask";
 
 type SearchBarProps = {
   onSearch?: (cpf: string, status: string) => void;
@@ -34,7 +34,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   useEffect(() => {
     if (onSearch) {
-      const unmaskedValue = removeMask(debouncedSearchValue);
+      const unmaskedValue = removeNonDigits(debouncedSearchValue);
       onSearch(unmaskedValue, searchStatusValue);
     }
   }, [debouncedSearchValue, onSearch, searchStatusValue]);
@@ -54,9 +54,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         <TextField
           placeholder="Digite um CPF válido"
           maxLength={14}
-          mask={cpfMask}
+          mask="cpf"
           value={searchCPFValue}
-          onChange={(e) => setSearchCPFValue(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSearchCPFValue(e.target.value)
+          }
         />
         <SelectComponent
           value={searchStatusValue}

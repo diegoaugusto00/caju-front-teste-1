@@ -2,48 +2,67 @@ import * as S from "./styles";
 import { HiOutlineTrash } from "react-icons/hi";
 import { ButtonSmall } from "~/components/atoms/Buttons";
 import { IconButton } from "~/components/atoms/Buttons/IconButton";
-import { STATUS } from "~/pages/Dashboard/constants";
-
-//TODO - Mudar as constantes para outra pasta para evitar chamar o pages aqui
 
 type RegistrationButtonsProps = {
   status: string;
   onApprove?: () => void;
   onReject?: () => void;
   onReview?: () => void;
-  ondelete?: () => void;
+  onDelete?: () => void;
 };
 
-export const RegistrationButtons: React.FC<RegistrationButtonsProps> = ({
-  status,
-  onApprove,
-  onReject,
-  onReview,
-  ondelete,
-}) => {
-  //TODO - Implementar factory para evitar repetições, usar record para mapear os status
-  if (status === STATUS.REVIEW) {
-    return (
-      <S.Actions>
+const DeleteButton = ({
+  onDelete,
+}: Pick<RegistrationButtonsProps, "onDelete">) => (
+  <IconButton aria-label="delete" onClick={onDelete} noStyle>
+    <HiOutlineTrash />
+  </IconButton>
+);
+
+const buttonMap = new Map<string, React.FC<RegistrationButtonsProps>>([
+  [
+    "REVIEW",
+    ({ onReject, onApprove, onDelete }) => (
+      <>
         <ButtonSmall bgcolor="rgb(255, 145, 154)" onClick={onReject}>
           Reprovar
         </ButtonSmall>
         <ButtonSmall bgcolor="rgb(155, 229, 155)" onClick={onApprove}>
           Aprovar
         </ButtonSmall>
-        <IconButton aria-label="refetch" onClick={ondelete} noStyle>
-          <HiOutlineTrash />
-        </IconButton>
-      </S.Actions>
-    );
-  }
+        <DeleteButton onDelete={onDelete} />
+      </>
+    ),
+  ],
+  [
+    "DEFAULT",
+    ({ onReview, onDelete }) => (
+      <>
+        <ButtonSmall bgcolor="#ff8858" onClick={onReview}>
+          Revisar novamente
+        </ButtonSmall>
+        <DeleteButton onDelete={onDelete} />
+      </>
+    ),
+  ],
+]);
 
+export const RegistrationButtons: React.FC<RegistrationButtonsProps> = ({
+  status,
+  onApprove,
+  onReject,
+  onReview,
+  onDelete,
+}) => {
+  //TODO - tratar erros para tratar um status não mapeado
+  const getButtonsByStatus = (props: RegistrationButtonsProps) => {
+    const ButtonComponent =
+      buttonMap.get(props.status) || buttonMap.get("DEFAULT")!;
+    return ButtonComponent(props);
+  };
   return (
     <S.Actions>
-      <ButtonSmall bgcolor="#ff8858" onClick={onReview}>
-        Revisar novamente
-      </ButtonSmall>
-      <HiOutlineTrash />
+      {getButtonsByStatus({ status, onApprove, onReject, onReview, onDelete })}
     </S.Actions>
   );
 };

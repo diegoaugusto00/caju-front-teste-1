@@ -8,7 +8,7 @@ const API_URL = import.meta.env?.VITE_API_URL || "http://localhost:3002";
 
 export const getRegistrations = async (
   page = 1,
-  limit = 10,
+  limit = 20,
   cpf?: string,
   status?: string
 ): Promise<RegistrationPaginateResponse> => {
@@ -33,6 +33,22 @@ export const getRegistrations = async (
       totalPages,
       currentPage: page,
     };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createRegistration = async (
+  data: Omit<Registration, "id">
+): Promise<Registration> => {
+  try {
+    const response = await axios.post(`${API_URL}/registrations`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data;
   } catch (error) {
     throw error;
   }

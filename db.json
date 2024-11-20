@@ -1,14 +1,6 @@
 {
   "registrations": [
     {
-      "id": "1",
-      "admissionDate": "22/10/2023",
-      "email": "filipe@caju.com.br",
-      "employeeName": "Filipe Marins",
-      "status": "REVIEW",
-      "cpf": "78502270001"
-    },
-    {
       "id": "4",
       "admissionDate": "22/10/2023",
       "email": "diego@caju.com.br",
@@ -21,7 +13,7 @@
       "email": "diih_augusto@live.com",
       "cpf": "08714925982",
       "admissionDate": "2024-11-12",
-      "status": "REVIEW",
+      "status": "APPROVED",
       "employeeName": "Diego sinkz Augusto"
     },
     {
@@ -29,7 +21,7 @@
       "email": "giovana_zilio94@hotmail.com",
       "cpf": "08714925982",
       "admissionDate": "2024-11-07",
-      "status": "APPROVED",
+      "status": "REVIEW",
       "employeeName": "Giovana Zilio"
     }
   ]

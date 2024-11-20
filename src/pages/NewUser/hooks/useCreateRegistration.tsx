@@ -10,12 +10,8 @@ const useCreateRegistration = () => {
   return useMutation<Registration, CustomError, Omit<Registration, "id">>(
     (registrationData) => createRegistration(registrationData),
     {
-      //TODO - invalidar cache em vez de adicionar novo registro
-      onSuccess: (newRegistration) => {
-        queryClient.setQueryData(
-          ["registrations"],
-          (old: Registration[] = []) => [...old, newRegistration]
-        );
+      onSuccess: () => {
+        queryClient.invalidateQueries(["registrations"]);
         toast.success("Registro criado com sucesso!");
       },
       onError: (error) => {

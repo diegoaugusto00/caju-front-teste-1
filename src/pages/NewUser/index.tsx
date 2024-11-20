@@ -30,16 +30,15 @@ const NewUserPage = () => {
   });
 
   const onSubmit = async (data: FormData) => {
+    const { name, ...formData } = data;
     const registrationData = {
-      ...data,
+      ...formData,
       status: STATUS.REVIEW,
-      employeeName: data.name,
+      employeeName: name,
     };
     await createRegistrationMutation.mutateAsync(registrationData);
     history.push(routes.dashboard);
   };
-
-  console.log(errors);
 
   return (
     <S.Container>
@@ -48,7 +47,7 @@ const NewUserPage = () => {
           <HiOutlineArrowLeft size={24} />
         </IconButton>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} role="form">
           <S.FormContainer>
             <FormField
               id="name"

@@ -1,7 +1,7 @@
 import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { SearchBar } from ".";
 import routes from "~/router/routes";
-import renderWithRouter from "~/utils/__tests__/renderWithRouter";
+import renderWithRouter from "~/utils/renderWithRouter";
 import { STATUS } from "../../constants";
 
 describe("SearchBar Component tests", () => {

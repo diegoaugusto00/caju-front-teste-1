@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-const Button = styled.button`
+const Button = styled.button.attrs({
+  type: "submit",
+})`
   outline: none;
   display: flex;
   align-items: center;
@@ -15,7 +17,6 @@ const Button = styled.button`
   font-size: 16px;
   font-weight: 600;
 `;
-
 export const ButtonSmall = styled.button<{
   bgcolor?: string;
   color?: string;
@@ -25,15 +26,14 @@ export const ButtonSmall = styled.button<{
   border-radius: 4px;
   border: none;
   padding: 4px 16px;
-  background-color: ${(props) => props.bgcolor ?? 'none'};
+  background-color: ${(props) => props.bgcolor ?? "none"};
   color: ${(props) => props.color ?? "#000"};
   cursor: pointer;
-  display: inline-flex; 
-  align-items: center; 
-  justify-content: center; 
-  white-space: nowrap; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
   text-align: center;
 `;
-
 
 export default Button;

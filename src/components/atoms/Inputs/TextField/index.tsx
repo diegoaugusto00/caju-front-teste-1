@@ -1,6 +1,7 @@
 import { InputHTMLAttributes } from "react";
 import styled from "styled-components";
 import { inputBaseStyle } from "../styles";
+import { handleSimpleMask, MaskType } from "~/utils/inputMask";
 
 const Input = styled.input`
   ${inputBaseStyle};
@@ -12,7 +13,7 @@ type TextFieldProps = {
   id?: string;
   value?: string;
   maxLength?: number;
-  mask?: (value: string) => string;
+  mask?: MaskType;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 } & InputHTMLAttributes<HTMLInputElement>;
 
@@ -27,16 +28,9 @@ const TextField: React.FC<TextFieldProps> = ({
   ...props
 }: TextFieldProps) => {
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = event.target;
-    if (mask) {
-      event.currentTarget.value = mask(value);
-    }
+    handleSimpleMask(event, mask, maxLength);
 
-    if (maxLength && value.length > maxLength) {
-      event.currentTarget.value = value.slice(0, maxLength);
-    }
-
-    if (typeof onChange === "function") {
+    if (onChange) {
       onChange(event);
     }
   }

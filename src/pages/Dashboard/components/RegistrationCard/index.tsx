@@ -51,7 +51,7 @@ const RegistrationCard: React.FC<RegistrationCardProps> = ({
         onApprove={onApprove}
         onReject={onReject}
         onReview={onReview}
-        ondelete={onDelete}
+        onDelete={onDelete}
       />
     </S.Card>
   );

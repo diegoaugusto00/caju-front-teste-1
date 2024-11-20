@@ -9,6 +9,8 @@ import { Registration } from "~/data/models/registration";
 import useUpdateRegistrationStatus from "../../hooks/registration/useUpdateRegistrationStatus";
 import useDeleteRegistration from "../../hooks/registration/useDeleteRegistration";
 import { STATUS } from "../../constants";
+import { useConfirmDialogStore } from "~/store/useConfirmDialogStore";
+import { createDialogHandler, DialogAction } from "./dialogHandler";
 
 type RegistrationCardProps = {
   registration: Registration;
@@ -17,20 +19,38 @@ type RegistrationCardProps = {
 const RegistrationCard: React.FC<RegistrationCardProps> = ({
   registration,
 }) => {
+  const { setOpenConfirmDialog, setCloseConfirmDialog } =
+    useConfirmDialogStore();
   const updateStatusMutation = useUpdateRegistrationStatus();
   const deleteRegistrationMutation = useDeleteRegistration();
 
-  const updateStatus = (newStatus: string) => {
-    updateStatusMutation.mutate({
-      registration: registration,
-      newStatus,
-    });
+  const handleAction = async (action: DialogAction) => {
+    if (action === "DELETE") {
+      await deleteRegistrationMutation.mutateAsync(registration.id);
+    } else {
+      const statusMap = {
+        APPROVE: STATUS.APPROVED,
+        REJECT: STATUS.REPROVED,
+        REVIEW: STATUS.REVIEW,
+      };
+      await updateStatusMutation.mutateAsync({
+        registration: registration,
+        newStatus: statusMap[action],
+      });
+    }
+    setCloseConfirmDialog();
   };
 
-  const onApprove = () => updateStatus(STATUS.APPROVED);
-  const onReject = () => updateStatus(STATUS.REPROVED);
-  const onReview = () => updateStatus(STATUS.REVIEW);
-  const onDelete = () => deleteRegistrationMutation.mutate(registration.id);
+  const handleDialog = createDialogHandler(
+    handleAction,
+    setOpenConfirmDialog,
+    setCloseConfirmDialog
+  );
+
+  const onApprove = handleDialog("APPROVE", registration.employeeName);
+  const onReject = handleDialog("REJECT", registration.employeeName);
+  const onReview = handleDialog("REVIEW", registration.employeeName);
+  const onDelete = handleDialog("DELETE", registration.employeeName);
 
   return (
     <S.Card data-testid="registration-card">

@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormField from "~/components/molecules/FormField";
 import useCreateRegistration from "./hooks/useCreateRegistration";
 import { STATUS } from "../Dashboard/constants";
+import LoadingButton from "~/components/atoms/Buttons/LoadingButton";
 
 type FormData = z.infer<typeof formSchema>;
 const NewUserPage = () => {
@@ -83,12 +84,13 @@ const NewUserPage = () => {
               error={errors.admissionDate?.message}
               aria-label="Data de admissão"
             />
-            <Button
+            <LoadingButton
               disabled={createRegistrationMutation.isLoading}
+              loading={createRegistrationMutation.isLoading}
               type="submit"
             >
               Cadastrar
-            </Button>
+            </LoadingButton>
           </S.FormContainer>
         </form>
       </S.Card>

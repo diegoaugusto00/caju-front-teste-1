@@ -1,7 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { CustomError } from '~/data/models/errors';
-import { deleteRegistration } from '~/data/services/registration/registration-service';
-import { toast } from 'react-toastify';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { CustomError } from "~/data/models/errors";
+import { deleteRegistration } from "~/data/services/registration/registration-service";
+import { toast } from "react-toastify";
+import { RegistrationPaginateResponse } from "~/data/models/registration";
 
 const useDeleteRegistration = () => {
   const queryClient = useQueryClient();
@@ -9,12 +10,28 @@ const useDeleteRegistration = () => {
   return useMutation<void, CustomError, string>(
     (id: string) => deleteRegistration(id),
     {
+      onMutate: async (deletedId) => {
+        // Otimisticamente atualiza o cache
+        queryClient.setQueriesData<RegistrationPaginateResponse>(
+          {
+            queryKey: ["registrations"],
+            exact: false,
+          },
+          (old) => {
+            if (!old) return;
+            return {
+              ...old,
+              data: old.data.filter((reg) => reg.id !== deletedId),
+              total: old.total - 1,
+            };
+          }
+        );
+      },
       onSuccess: () => {
-        //TODO - em vez de invalidar a query passar o novo objeto para n precisa fazer outra requisição
-        queryClient.invalidateQueries(['registrations']);
-        toast.success('Registro deletado com sucesso!');
+        toast.success("Registro deletado com sucesso!");
       },
       onError: (error) => {
+        queryClient.invalidateQueries(["registrations"]);
         toast.error(`Erro ao excluir registro: ${error.message}`);
       },
     }

@@ -4,11 +4,12 @@ import { UseGetRegistrationsReturn } from "../../hooks/registration/types";
 import { useMemo } from "react";
 import {
   ApprovedFilterStrategy,
+  IFilterStrategy,
   ReprovedFilterStrategy,
   ReviewFilterStrategy,
 } from "./strategy/filterStrategies";
-import type { IFilterStrategy } from "./strategy/filterStrategyInterface";
 import { STATUS } from "../../constants";
+import SkeletonCard from "~/components/molecules/SkeletonCard";
 
 const allColumns = [
   { status: STATUS.REVIEW, title: "Pronto para revisar" },
@@ -21,7 +22,7 @@ type ColumnsProps = {
 };
 
 const Collumns: React.FC<ColumnsProps> = ({ registrationsQuery }) => {
-  const { registrations = [] } = registrationsQuery;
+  const { registrations = [], isFetching } = registrationsQuery;
 
   const renderRegistrationCards = useMemo(() => {
     const filterStrategies = new Map<string, IFilterStrategy>([
@@ -38,11 +39,18 @@ const Collumns: React.FC<ColumnsProps> = ({ registrationsQuery }) => {
         <S.Column status={column.status} key={column.title}>
           <S.TitleColumn status={column.status}>{column.title}</S.TitleColumn>
           <S.CollumContent>
-            {!filteredRegistrations || filteredRegistrations.length === 0 ? (
+            {isFetching ? (
+              Array.from({ length: 3 }, (_, index) => (
+                <SkeletonCard key={`skeleton-${column.status}-${index}`} />
+              ))
+            ) : !filteredRegistrations || filteredRegistrations.length === 0 ? (
               <S.EmptyContent>Nenhum Registro Encontrado.</S.EmptyContent>
             ) : (
-              filteredRegistrations.map((registration, index) => (
-                <RegistrationCard registration={registration} key={index} />
+              filteredRegistrations.map((registration) => (
+                <RegistrationCard
+                  registration={registration}
+                  key={registration.id || `registration-${column.status}`}
+                />
               ))
             )}
           </S.CollumContent>

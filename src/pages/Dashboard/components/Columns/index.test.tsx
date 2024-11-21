@@ -149,4 +149,6 @@ describe("Collumns Component tests", () => {
     const emptyMessages = screen.getAllByText("Nenhum Registro Encontrado.");
     expect(emptyMessages).toHaveLength(3);
   });
+
+  //TODO - criar testes para validar o skeleton
 });

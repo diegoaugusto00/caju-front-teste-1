@@ -18,17 +18,17 @@ const registrationStatusStyles: {
 
 export const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 24px;
   justify-content: center;
   margin-top: 24px;
-  
+
   @media (max-width: 1024px) {
-    grid-template-columns: 1fr;  
+    grid-template-columns: 1fr;
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr; 
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -38,16 +38,16 @@ export const Column = styled.div<{ status: string }>`
     registrationStatusStyles[status].background};
   border-radius: 32px;
   min-height: 80vh;
-  max-height: 80vh;  
+  max-height: 80vh;
 
   @media (max-width: 1024px) {
-    min-height: 60vh; 
-    max-height: 60vh;  
+    min-height: 60vh;
+    max-height: 60vh;
   }
 
   @media (max-width: 768px) {
-    min-height: 50vh; 
-    max-height: 50vh; 
+    min-height: 50vh;
+    max-height: 50vh;
   }
 `;
 
@@ -60,6 +60,10 @@ export const TitleColumn = styled.h3<{ status: string }>`
 export const CollumContent = styled.div`
   overflow: auto;
   max-height: 85%;
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 export const EmptyContent = styled.div`

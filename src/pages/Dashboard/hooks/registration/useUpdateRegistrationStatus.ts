@@ -1,21 +1,47 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { CustomError } from '~/data/models/errors';
-import type { Registration } from '~/data/models/registration';
-import { updateRegistrationStatus } from '~/data/services/registration/registration-service';
-import { toast } from 'react-toastify';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { CustomError } from "~/data/models/errors";
+import type {
+  Registration,
+  RegistrationPaginateResponse,
+} from "~/data/models/registration";
+import { updateRegistrationStatus } from "~/data/services/registration/registration-service";
+import { toast } from "react-toastify";
 
 const useUpdateRegistrationStatus = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<void, CustomError, { registration: Registration; newStatus: string }>(
-    ({registration, newStatus}) => updateRegistrationStatus(registration, newStatus),
+  return useMutation<
+    void,
+    CustomError,
+    { registration: Registration; newStatus: string }
+  >(
+    ({ registration, newStatus }) =>
+      updateRegistrationStatus(registration, newStatus),
     {
-      onSuccess: () => {
-        //TODO - em vez de invalidar a query passar o novo objeto para n precisa fazer outra requisição
-        queryClient.invalidateQueries(['registrations']);
-        toast.success('Status atualizado com sucesso!');
+      onMutate: async ({ registration, newStatus }) => {
+        // Otimisticamente atualiza o cache
+
+        queryClient.setQueriesData<RegistrationPaginateResponse>(
+          {
+            queryKey: ["registrations"],
+            exact: false,
+          },
+          (old) => {
+            if (!old) return;
+            return {
+              ...old,
+              data: old.data.map((reg) =>
+                reg.id === registration.id ? { ...reg, status: newStatus } : reg
+              ),
+            };
+          }
+        );
       },
-      onError: (error) => {
+      onSuccess: () => {
+        toast.success("Status atualizado com sucesso!");
+      },
+      onError: (error, _, context) => {
+        queryClient.setQueryData(["registrations"], context);
         toast.error(`Erro ao atualizar status: ${error.message}`);
       },
     }

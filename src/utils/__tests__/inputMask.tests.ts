@@ -14,6 +14,7 @@ describe("inputMasks tests", () => {
   });
 
   describe("handleSimpleMask", () => {
+    //TODO - remover any
     let mockEvent: any;
 
     beforeEach(() => {

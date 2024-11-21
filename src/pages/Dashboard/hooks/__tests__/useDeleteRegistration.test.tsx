@@ -1,8 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { renderHook } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react";
 import { toast } from "react-toastify";
 import { deleteRegistration } from "~/data/services/registration/registration-service";
 import { ReactNode } from "react";
+import { RegistrationPaginateResponse } from "~/data/models/registration";
 import useDeleteRegistration from "../registration/useDeleteRegistration";
 
 interface WrapperProps {
@@ -24,7 +25,13 @@ describe("useDeleteRegistration tests", () => {
   let queryClient: QueryClient;
 
   beforeEach(() => {
-    queryClient = new QueryClient();
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+    });
     jest.clearAllMocks();
   });
 
@@ -32,35 +39,89 @@ describe("useDeleteRegistration tests", () => {
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 
-  it("should delete register with success", async () => {
+  const mockInitialData: RegistrationPaginateResponse = {
+    data: [
+      {
+        id: "123",
+        employeeName: "Test User",
+        email: "test@test.com",
+        admissionDate: "2023-01-01",
+        status: "APPROVED",
+        cpf: "12345678901",
+      },
+    ],
+    total: 1,
+    currentPage: 1,
+    totalPages: 1,
+  };
+
+  it("should update cache and show success message on successful deletion", async () => {
     const mockId = "123";
     (deleteRegistration as jest.Mock).mockResolvedValueOnce(undefined);
-    const invalidateQueriesSpy = jest.spyOn(queryClient, "invalidateQueries");
+
+    // Configure o cache inicial
+    queryClient.setQueryData(["registrations"], mockInitialData);
 
     const { result } = renderHook(() => useDeleteRegistration(), { wrapper });
 
-    await result.current.mutateAsync(mockId);
+    await act(async () => {
+      await result.current.mutateAsync(mockId);
+    });
+
+    // Verifica se o cache foi atualizado
+    const updatedData = queryClient.getQueryData<RegistrationPaginateResponse>([
+      "registrations",
+    ]);
+    expect(updatedData?.data).toHaveLength(0);
+    expect(updatedData?.total).toBe(0);
 
     expect(deleteRegistration).toHaveBeenCalledWith(mockId);
     expect(toast.success).toHaveBeenCalledWith(
       "Registro deletado com sucesso!"
     );
-    expect(invalidateQueriesSpy).toHaveBeenCalledWith(["registrations"]);
   });
 
-  it("should handle error when delete register", async () => {
+  it("should handle error and revert cache when deletion fails", async () => {
     const mockId = "123";
     const error = new Error("Erro Teste");
     (deleteRegistration as jest.Mock).mockRejectedValueOnce(error);
 
+    // Configure o cache inicial
+    queryClient.setQueryData(["registrations"], mockInitialData);
+
     const { result } = renderHook(() => useDeleteRegistration(), { wrapper });
 
-    try {
+    await act(async () => {
+      try {
+        await result.current.mutateAsync(mockId);
+      } catch (e) {
+        // Erro esperado
+      }
+    });
+
+    expect(toast.error).toHaveBeenCalledWith(
+      "Erro ao excluir registro: Erro Teste"
+    );
+
+    // Verifica se o cache foi invalidado
+    expect(queryClient.getQueryState(["registrations"])?.isInvalidated).toBe(
+      true
+    );
+  });
+
+  it("should handle empty cache gracefully", async () => {
+    const mockId = "123";
+    (deleteRegistration as jest.Mock).mockResolvedValueOnce(undefined);
+
+    const { result } = renderHook(() => useDeleteRegistration(), { wrapper });
+
+    await act(async () => {
       await result.current.mutateAsync(mockId);
-    } catch (e) {
-      expect(toast.error).toHaveBeenCalledWith(
-        "Erro ao excluir registro: Erro Teste"
-      );
-    }
+    });
+
+    expect(deleteRegistration).toHaveBeenCalledWith(mockId);
+    expect(toast.success).toHaveBeenCalledWith(
+      "Registro deletado com sucesso!"
+    );
   });
 });

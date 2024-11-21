@@ -34,7 +34,7 @@ export const formSchema = z.object({
     .refine((date) => {
       const admissionDate = new Date(date);
       const today = new Date();
-      today.setHours(0, 0, 0, 0); // Considera apenas a data sem a hora
+      today.setHours(0, 0, 0, 0);
       return admissionDate <= today;
     }, "Data de admissão deve ser menor ou igual a data atual"),
 });

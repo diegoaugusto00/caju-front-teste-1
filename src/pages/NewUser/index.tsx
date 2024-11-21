@@ -1,5 +1,4 @@
 import * as S from "./styles";
-import Button from "~/components/atoms/Buttons";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import { IconButton } from "~/components/atoms/Buttons/IconButton";
 import { useHistory } from "react-router-dom";
@@ -48,7 +47,7 @@ const NewUserPage = () => {
           <HiOutlineArrowLeft size={24} />
         </IconButton>
 
-        <form onSubmit={handleSubmit(onSubmit)} role="form">
+        <form onSubmit={handleSubmit(onSubmit)}>
           <S.FormContainer>
             <FormField
               id="name"

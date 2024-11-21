@@ -1,7 +1,7 @@
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 declare global {
-  var importMeta: { env: { VITE_API_URL: string } };
+  const importMeta: { env: { VITE_API_URL: string } };
 }
 
 export {};

@@ -38,6 +38,7 @@ const RegistrationCard: React.FC<RegistrationCardProps> = ({
         newStatus: statusMap[action],
       });
     }
+    //TODO - ajustar para limpar de forma atomica, se mudar pra slow connection fica o modal aberto por um tempo
     setCloseConfirmDialog();
   };
 

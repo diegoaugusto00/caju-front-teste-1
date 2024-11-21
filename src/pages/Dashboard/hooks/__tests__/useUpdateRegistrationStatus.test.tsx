@@ -62,7 +62,6 @@ describe("useUpdateRegistrationStatus tests", () => {
     const newStatus = "APPROVED";
     (updateRegistrationStatus as jest.Mock).mockResolvedValueOnce(undefined);
 
-    // Configura o cache inicial
     queryClient.setQueryData(["registrations"], mockInitialData);
 
     const { result } = renderHook(() => useUpdateRegistrationStatus(), {
@@ -76,7 +75,6 @@ describe("useUpdateRegistrationStatus tests", () => {
       });
     });
 
-    // Verifica se o cache foi atualizado
     const updatedData = queryClient.getQueryData<RegistrationPaginateResponse>([
       "registrations",
     ]);

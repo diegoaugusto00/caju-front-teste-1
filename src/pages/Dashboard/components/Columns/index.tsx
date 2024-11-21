@@ -61,7 +61,7 @@ const Collumns: React.FC<ColumnsProps> = ({ registrationsQuery }) => {
         </S.Column>
       );
     });
-  }, [registrations]);
+  }, [registrations, isFetching]);
 
   return <S.Container>{renderRegistrationCards}</S.Container>;
 };

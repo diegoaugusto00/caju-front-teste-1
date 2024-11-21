@@ -59,7 +59,6 @@ describe("useDeleteRegistration tests", () => {
     const mockId = "123";
     (deleteRegistration as jest.Mock).mockResolvedValueOnce(undefined);
 
-    // Configure o cache inicial
     queryClient.setQueryData(["registrations"], mockInitialData);
 
     const { result } = renderHook(() => useDeleteRegistration(), { wrapper });
@@ -67,8 +66,6 @@ describe("useDeleteRegistration tests", () => {
     await act(async () => {
       await result.current.mutateAsync(mockId);
     });
-
-    // Verifica se o cache foi atualizado
     const updatedData = queryClient.getQueryData<RegistrationPaginateResponse>([
       "registrations",
     ]);
@@ -85,8 +82,6 @@ describe("useDeleteRegistration tests", () => {
     const mockId = "123";
     const error = new Error("Erro Teste");
     (deleteRegistration as jest.Mock).mockRejectedValueOnce(error);
-
-    // Configure o cache inicial
     queryClient.setQueryData(["registrations"], mockInitialData);
 
     const { result } = renderHook(() => useDeleteRegistration(), { wrapper });
@@ -95,15 +90,13 @@ describe("useDeleteRegistration tests", () => {
       try {
         await result.current.mutateAsync(mockId);
       } catch (e) {
-        // Erro esperado
+        expect(e).toBe(error);
       }
     });
 
     expect(toast.error).toHaveBeenCalledWith(
       "Erro ao excluir registro: Erro Teste"
     );
-
-    // Verifica se o cache foi invalidado
     expect(queryClient.getQueryState(["registrations"])?.isInvalidated).toBe(
       true
     );

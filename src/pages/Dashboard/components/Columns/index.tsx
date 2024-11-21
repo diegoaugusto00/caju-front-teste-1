@@ -36,7 +36,11 @@ const Collumns: React.FC<ColumnsProps> = ({ registrationsQuery }) => {
       const filteredRegistrations = strategy?.filter(registrations);
 
       return (
-        <S.Column status={column.status} key={column.title}>
+        <S.Column
+          status={column.status}
+          key={column.title}
+          data-testid={`column-${column.status}`}
+        >
           <S.TitleColumn status={column.status}>{column.title}</S.TitleColumn>
           <S.CollumContent>
             {isFetching ? (

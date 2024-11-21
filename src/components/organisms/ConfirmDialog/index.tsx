@@ -50,7 +50,7 @@ const ConfirmDialog = () => {
 
   return (
     <DialogOverlay>
-      <DialogContainer>
+      <DialogContainer role="dialog" aria-modal="true">
         <DialogTitle>{title}</DialogTitle>
         <DialogMessage>{description}</DialogMessage>
         <DialogActions>

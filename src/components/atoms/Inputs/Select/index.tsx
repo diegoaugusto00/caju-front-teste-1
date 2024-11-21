@@ -31,7 +31,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
 }) => {
   return (
     <SelectWrapper>
-      <Select onChange={onChange} value={value}>
+      <Select data-testid="status-select" onChange={onChange} value={value}>
         <option value="" disabled>
           {placeholder}
         </option>

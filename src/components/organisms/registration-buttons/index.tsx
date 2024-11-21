@@ -24,12 +24,14 @@ const buttonMap = new Map<string, React.FC<RegistrationButtonsProps>>([
     "REVIEW",
     ({ onReject, onApprove, onDelete }) => (
       <>
-        <ButtonSmall bgcolor="rgb(255, 145, 154)" onClick={onReject}>
-          Reprovar
-        </ButtonSmall>
-        <ButtonSmall bgcolor="rgb(155, 229, 155)" onClick={onApprove}>
-          Aprovar
-        </ButtonSmall>
+        <S.ButtonGroup>
+          <ButtonSmall bgcolor="rgb(255, 145, 154)" onClick={onReject}>
+            Reprovar
+          </ButtonSmall>
+          <ButtonSmall bgcolor="rgb(155, 229, 155)" onClick={onApprove}>
+            Aprovar
+          </ButtonSmall>
+        </S.ButtonGroup>
         <DeleteButton onDelete={onDelete} />
       </>
     ),
@@ -54,7 +56,7 @@ export const RegistrationButtons: React.FC<RegistrationButtonsProps> = ({
   onReview,
   onDelete,
 }) => {
-  //TODO - tratar erros para tratar um status não mapeado
+  //TODO - tratar um status não mapeado
   const getButtonsByStatus = (props: RegistrationButtonsProps) => {
     const ButtonComponent =
       buttonMap.get(props.status) || buttonMap.get("DEFAULT")!;

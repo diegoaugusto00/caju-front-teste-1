@@ -6,13 +6,16 @@
   "scripts": {
     "dev": "vite",
     "init:db": "json-server --watch db.json --port 3002",
+    "init:db-test": "json-server db.test.json --port 3002",
     "build": "tsc && vite build",
     "test:dev": "jest --watch --verbose --no-cache",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:playwright": "npx playwright test",
+    "test:playwright:debug": "npx playwright test --debug"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

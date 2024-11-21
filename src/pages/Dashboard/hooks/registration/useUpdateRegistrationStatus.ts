@@ -19,8 +19,6 @@ const useUpdateRegistrationStatus = () => {
       updateRegistrationStatus(registration, newStatus),
     {
       onMutate: async ({ registration, newStatus }) => {
-        // Otimisticamente atualiza o cache
-
         queryClient.setQueriesData<RegistrationPaginateResponse>(
           {
             queryKey: ["registrations"],

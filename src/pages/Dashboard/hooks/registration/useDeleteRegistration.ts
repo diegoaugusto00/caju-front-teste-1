@@ -11,7 +11,6 @@ const useDeleteRegistration = () => {
     (id: string) => deleteRegistration(id),
     {
       onMutate: async (deletedId) => {
-        // Otimisticamente atualiza o cache
         queryClient.setQueriesData<RegistrationPaginateResponse>(
           {
             queryKey: ["registrations"],

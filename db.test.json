@@ -1,28 +1,28 @@
 {
   "registrations": [
     {
-      "id": "5",
-      "email": "diih_augusto@live.com",
+      "id": "test1",
+      "email": "test1@example.com",
       "cpf": "08714925982",
       "admissionDate": "2024-11-12",
       "status": "REVIEW",
-      "employeeName": "Diego sinkz Augusto"
+      "employeeName": "Test User 1"
     },
     {
-      "id": "e5ff",
-      "email": "diihaugusto@live.com",
+      "id": "test2",
+      "email": "test2@example.com",
       "cpf": "08714925982",
       "admissionDate": "2024-11-07",
       "status": "APPROVED",
-      "employeeName": "Diego sinkz Augusto"
+      "employeeName": "Test User 2"
     },
     {
-      "id": "dd45",
-      "email": "diihaugusto@live.com",
+      "id": "test3",
+      "email": "test3@example.com",
       "cpf": "08714925982",
       "admissionDate": "2024-11-21",
       "status": "REVIEW",
-      "employeeName": "Diego sinkz Augusto"
+      "employeeName": "Test User 3"
     }
   ]
 }
